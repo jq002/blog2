@@ -18,16 +18,7 @@ app.use(koalogger());
 const staticPath = './dist'
 app.use(static(staticPath))
 
-// const historyFallback = require('koa2-history-api-fallback');
-// app.use(historyFallback({
-//     verbose: true,
-//     // index: '/admin.html',
-//     rewrites: [
-//       { from: /^\/admin$/, to: '/front.html' },
-//     ],
-//     // htmlAcceptHeaders: ['text/html', 'application/xhtml+xml']
-//     // path: /^\/admin/
-// }));
+
 // 对路由admin直接走historyApiFallback,而不是用服务端渲染
 app.use(koaconvert(historyApiFallback({
   verbose: true,
@@ -74,23 +65,6 @@ routerInfo.get('*', async(ctx, next) => {
 })
 
 app.use(routerInfo.routes())
-
-// app.use(async (ctx) => {
-//   const context = {
-//     url: ctx.request.url
-//   }
-//   function renderToStringPromise() {
-//     return new Promise((resolve, reject) => {
-//       renderer.renderToString(context, (err, html) => {
-//         if (err) {
-//           console.log(err);
-//         }
-//         resolve(html);
-//       })
-//     })
-//   }
-//   ctx.body = await renderToStringPromise();
-// })
 // 流式渲染
 router.get('*', async(ctx, next) => {
   let res = ctx.res;
