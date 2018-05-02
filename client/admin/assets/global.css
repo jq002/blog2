@@ -1,0 +1,13 @@
+html,body,ul,li,p,menu{
+    margin: 0;
+    padding: 0;
+}
+html,body{
+    height: 100%;
+}
+a{
+    text-decoration: none;      
+}
+a:hover {
+  text-decoration: underline;
+}
