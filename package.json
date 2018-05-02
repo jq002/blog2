@@ -6,21 +6,27 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "dev": "nodemon server.js",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "dev:client": "webpack -w --config build/webpack.client.config.js",
-    "dev:server": "webpack -w  --config build/webpack.server.config.js"
+    "dev:client": "webpack  --config build/webpack.client.config.js",
+    "dev:server": "webpack  --config build/webpack.server.config.js"
   },
   "dependencies": {
+    "element-ui": "^2.3.7",
     "express": "^4.16.3",
     "koa": "^2.5.1",
+    "koa-convert": "^1.2.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
+    "koa2-history-api-fallback": "^0.0.5",
     "lru-cache": "^4.1.2",
     "vue": "^2.5.11",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.16",
     "vuex": "^3.0.1",
-    "vuex-router-sync": "^5.0.0"
+    "vuex-router-sync": "^5.0.0",
+    "wangeditor": "^3.1.1"
   },
   "browserslist": [
     "> 1%",
@@ -35,16 +41,19 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "chokidar": "^2.0.3",
+    "connect-history-api-fallback": "^1.5.0",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
+    "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.5.3",
+    "nodemon": "^1.17.3",
     "sass-loader": "^6.0.6",
+    "url-loader": "^1.0.1",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
-    "webpack-dev-middleware": "^3.1.3",
-    "webpack-dev-server": "^2.9.1",
+    "webpack-dev-middleware": "^2.0.6",
     "webpack-hot-middleware": "^2.22.1",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2"

@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist'),//打包后存放的本地目录，必须是string类型的绝对路径
     publicPath: '/',//配置发布到线上的资源的路径前缀
-    // filename: 'build.js'
+    filename: '[name].js'
   },
   module: {
     rules: [{
@@ -64,6 +64,14 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'fonts/[name].[hash:7].[ext]'
         }
       }
     ]

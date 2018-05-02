@@ -7,6 +7,8 @@ export default context => {
   return new Promise((resolve, reject) => {
     const { app, router,store } = createApp()
     // 设置服务器端 router 的位置
+    console.log('context url:'+context.url)
+
     router.push(context.url)
     // 等到 router 将可能的异步组件和钩子函数解析完
     router.onReady(() => {
@@ -28,7 +30,6 @@ export default context => {
         // 当我们将状态附加到上下文，
         // 并且 `template` 选项用于 renderer 时，
         // 状态将自动序列化为 `window.__INITIAL_STATE__`，并注入 HTML。
-        console.log('somthing...')
         context.state=store.state;
         resolve(app)
 

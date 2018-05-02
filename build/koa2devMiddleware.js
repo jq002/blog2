@@ -1,17 +1,25 @@
-const webpackDev  = require('webpack-dev-middleware')
+const devMiddleware = require('webpack-dev-middleware');
 
-const devMiddleware = (compiler, opts) => {
-    const middleware = webpackDev(compiler, opts)
-    return async (ctx, next) => {
-        await middleware(ctx.req, {
-            end: (content) => {
-                ctx.body = content
-            },
-            setHeader: (name, value) => {
-                ctx.set(name, value)
-            }
-        }, next)
+module.exports = (compiler, opts) => {
+  const expressMiddleware = devMiddleware(compiler, opts)
+  let nextFlag = false;
+  function nextFn() {
+    nextFlag = true;
+  }
+  function devFn(ctx, next) {
+    expressMiddleware(ctx.req, {
+        end: (content) => {
+          ctx.body = content
+        },
+        setHeader: (name, value) => {
+          ctx.headers[name] = value
+        }
+      }, nextFn)
+    if(nextFlag) {
+      nextFlag = false;
+      return next();
     }
+  }
+  devFn.fileSystem = expressMiddleware.fileSystem
+  return devFn;
 }
-
-module.exports=devMiddleware;
