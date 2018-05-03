@@ -5,15 +5,44 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import './assets/global.css'
+import './assets/global.css';
+import store from './store';
+import Axios from 'axios'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
+router.beforeEach((to,from,next)=>{
+  console.log(store.state);
+  if(to.meta.authPage){
+    if(store.state.token){
+      next('/admin')
+    }
+    next()
+  }else{
+    if(store.state.token){
+      Axios.defaults.headers.common['Authorization']=store.state.token;
+      next()
+    }else{
+      app.$message.error("请先登录");
+      next('/admin/login')
+    }
+  }
+})
+//axios拦截
+Axios.interceptors.response.use(function(res){
+  return res;
+},function(err){
+  if(err.response.data.error.indexOf('token')){
+    store.commit("DELETE_TOKEN")
+  }
+  return Promise.reject(error);
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

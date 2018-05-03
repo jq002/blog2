@@ -14,7 +14,7 @@ module.exports = merge(baseConfig, {
   // 此处告知 server bundle 使用 Node 风格导出模块(Node-style exports)
   output: {
     libraryTarget: 'commonjs2',
-    filename: '[name].server.js',
+    filename: 'static-[name]-server.js',
 
   },
   // https://webpack.js.org/configuration/externals/#function

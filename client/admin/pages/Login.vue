@@ -6,16 +6,17 @@
     <el-input type="text" v-model="user.username" auto-complete="off"></el-input>
   </el-form-item>
   <el-form-item label="密码" prop="pass">
-    <el-input type="password" v-model="user.pass" auto-complete="off"></el-input>
+    <el-input type="password" v-model="user.pass" auto-complete="off" @keyup.enter="submitForm('loginForm')"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @keyup.enter="submitForm('loginForm')" @click="submitForm('loginForm')">登录</el-button>
+    <el-button type="primary"  @click="submitForm('loginForm')">登录</el-button>
   </el-form-item>
 </el-form>
   </div>
 </template>
 
 <script>
+import md5 from 'md5'
 export default {
   data() {
     return {
@@ -36,10 +37,23 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$router.replace({
-            name: "Home"
+
+          let info = {
+            username: this.user.username,
+            password: md5(this.user.pass).toUpperCase()
+          };
+          this.$store.dispatch("createToken", info).then(res => {
+            if (res.data.success) {
+              this.$message.success("登录成功");
+              this.$router.push({
+                name: "Home"
+              });
+            }
+          }).catch((err)=>{
+            console.log(err)
+            // this.$message.error(err)
           });
-          this.$message.success("登录成功");
+
         } else {
           console.log("error submit!!");
           return false;
@@ -57,15 +71,14 @@ export default {
   box-shadow: 0 0 25px #cac6c6;
   text-align: center;
   padding-top: 10px;
-  .login-form{
+  .login-form {
     padding: 0 35px;
-    label{
+    label {
       display: none;
     }
-    .el-button{
+    .el-button {
       width: 120px;
     }
-
   }
 }
 </style>
