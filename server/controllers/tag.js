@@ -4,8 +4,8 @@ const jwt=require('jsonwebtoken');
 const config=require('../config');
 
 class TagController{
-    async createTag(ctx){
-        const tagName=ctx.require.body.name;
+    static async createTag(ctx){
+        const tagName=ctx.request.body.name;
         if(tagName==""){
             ctx.throw(400, 'tagname is empty 标签名不能为空');
         }
@@ -30,16 +30,16 @@ class TagController{
             tag:result
         }
     }
-    async getAllTag(ctx){
+    static async getAllTag(ctx){
         const tagArr=await Tag.find().catch(err=>{
             ctx.throw(500,'server error')
         });
         ctx.body={
             success:true,
-            tagArr
+            tags:tagArr
         }
     }
-     async  deleteTag(ctx) {
+    static async  deleteTag(ctx) {
         const id = ctx.params.id;
         const tag = await Tag.findByIdAndRemove(id).catch(err => {
           if (err.name === 'CastError') {
@@ -53,3 +53,4 @@ class TagController{
         }
       }
 }
+module.exports=TagController

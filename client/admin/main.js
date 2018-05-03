@@ -24,7 +24,7 @@ router.beforeEach((to,from,next)=>{
       Axios.defaults.headers.common['Authorization']=store.state.token;
       next()
     }else{
-      app.$message.error("请先登录");
+      // app.$message.error("请先登录");
       next('/admin/login')
     }
   }
@@ -33,10 +33,12 @@ router.beforeEach((to,from,next)=>{
 Axios.interceptors.response.use(function(res){
   return res;
 },function(err){
-  if(err.response.data.error.indexOf('token')){
+  if(err.response.data.indexOf('token')){
     store.commit("DELETE_TOKEN")
+    console.log("登陆失效，请重新登陆")
+    // app.$message.error("登陆失效，请重新登陆");
   }
-  return Promise.reject(error);
+  return Promise.reject(err);
 })
 /* eslint-disable no-new */
 new Vue({

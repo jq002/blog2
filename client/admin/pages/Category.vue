@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <el-tag
-      :key="tag"
+      :key="tag._id"
       v-for="tag in dynamicTags"
       closable
       :disable-transitions="false"
       @close="handleClose(tag)">
-      {{tag}}
+      {{tag.name}}
     </el-tag>
     <el-input
       class="input-new-tag"
@@ -23,18 +23,39 @@
 </template>
 
 <script>
+import api from "./../../api/login";
 export default {
   name: "Category",
   data() {
     return {
-      dynamicTags: ["标签一", "标签二", "标签三"],
+      dynamicTags: [],
       inputVisible: false,
       inputValue: ""
     };
   },
+  created() {
+    this.getAllTags();
+  },
   methods: {
+    getAllTags() {
+      api.getAllTags().then(res => {
+        if (res.data.success) {
+          this.dynamicTags = res.data.tags;
+        } else {
+          this.dynamicTags = [];
+        }
+      });
+    },
     handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      api.deleteTag(tag.id).then(res => {
+        if (res.data.success) {
+          this.$message.success("标签删除成功");
+           this.getAllTags();
+          // this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+        } else {
+          this.$message.success("标签删除失败");
+        }
+      });
     },
 
     showInput() {
@@ -47,7 +68,15 @@ export default {
     handleInputConfirm() {
       let inputValue = this.inputValue;
       if (inputValue) {
-        this.dynamicTags.push(inputValue);
+        api.createTag(inputValue).then(res => {
+          if (res.data.success) {
+            this.$message.success("标签添加成功");
+             this.getAllTags();
+            // this.dynamicTags.push({name:inputValue});
+          } else {
+            this.$message.success("标签添加失败");
+          }
+        });
       }
       this.inputVisible = false;
       this.inputValue = "";
@@ -57,6 +86,9 @@ export default {
 </script>
 
 <style>
+.el-tag{
+  margin-bottom: 20px;
+}
 .el-tag + .el-tag {
   margin-left: 10px;
 }

@@ -30,7 +30,7 @@ class UserController{
                 const token=jwt.sign({
                     uid:user._id,
                     name:user.username,
-                    exp:Math.floor(Date.now()/1000)+2*60//2分钟
+                    exp:Math.floor(Date.now()/1000)+24*60*60//1天
                 },config.jwt.secret);
                 ctx.body={
                     success:true,

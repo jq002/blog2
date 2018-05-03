@@ -6,6 +6,9 @@ import api from './../../api/login'
 Vue.use(Vuex)
  const CREATE_TOKEN = 'CREATE_TOKEN';
  const DELETE_TOKEN = 'DELETE_TOKEN';
+ const CREATE_TAG='CREATE_TAG';
+ const DELETE_TAG='DELETE_TAG';
+ const GET_ALL_TAG='GET_ALL_TAG';
 const store=new Vuex.Store({
     state:{
         // articleList:[],
@@ -24,14 +27,13 @@ const store=new Vuex.Store({
         // selectTagArr:[],
         token:sessionStorage.getItem('blog')
     },
-    // getters:{
+    // getters:{//派生的方法
     //     articleList:state=>state.articleList,
     //     tagList:state=>state.tagList,
     //     currentArticle:state=>state.currentArticle,
     //     allPage:state=>state.allPage,
     //     curPage:state=>state.curPage,
     //     selectTagArr:state=>state.selectTagArr
-
     // },
     mutations:{
         [CREATE_TOKEN](state,token){
@@ -40,7 +42,7 @@ const store=new Vuex.Store({
         },
         [DELETE_TOKEN](state){
             state.token=null;
-            sessionStorage.setItem('blog')
+            sessionStorage.setItem('blog',"")
         }
 
     },

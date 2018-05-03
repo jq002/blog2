@@ -16,7 +16,7 @@ module.exports = {
       },
       admin: {  //后台初始化的用户名密码
           username: 'admin',
-          password: 'password'
+          password: '123456'
       }
   };
   

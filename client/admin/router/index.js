@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Article from './../pages/Article.vue'
 import Category from './../pages/Category.vue'
 import HelloWorld from './../components/HelloWorld.vue'
-import MarkdownEdit from './../pages/MarkdownEdit.vue'
+import MarkdownEditor from './../pages/MarkdownEditor.vue'
 import Login from './../pages/Login.vue'
 import Home from './../pages/Home.vue'
 
@@ -35,7 +35,7 @@ export default new Router({
       {
         name: 'MarkdownEdit',
         path: '/mdedit',
-        component: MarkdownEdit
+        component: MarkdownEditor
       }]
   } ,{
     path: '*',
