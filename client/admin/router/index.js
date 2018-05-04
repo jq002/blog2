@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Article from './../pages/Article.vue'
+import Articles from './../pages/Articles.vue'
 import Category from './../pages/Category.vue'
 import HelloWorld from './../components/HelloWorld.vue'
 import MarkdownEditor from './../pages/MarkdownEditor.vue'
+import MavonEditor from './../pages/MavonEditor.vue'
 import Login from './../pages/Login.vue'
 import Home from './../pages/Home.vue'
 
@@ -23,9 +24,9 @@ export default new Router({
     component: Home,
     name: 'Home',
     children: [{
-        name: 'Article',
-        path: '/article',
-        component: Article
+        name: 'Articles',
+        path: '/articles',
+        component: Articles
       },
       {
         name: 'Category',
@@ -33,10 +34,16 @@ export default new Router({
         component: Category
       },
       {
-        name: 'MarkdownEdit',
-        path: '/mdedit',
+        name: 'MarkdownEditor',
+        path: '/mdEdit',
         component: MarkdownEditor
-      }]
+      },
+      {
+        name: 'MavonEditor',
+        path: '/mavonEdit',
+        component: MavonEditor
+      },
+    ]
   } ,{
     path: '*',
     redirect: '/admin' // 输入其他不存在的地址自动跳回首页

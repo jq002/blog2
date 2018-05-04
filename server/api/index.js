@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const UserController = require('../controllers/user')
 const TagController=require('../controllers/tag')
+const ArticleController=require('../controllers/article')
 const verify=require('./verify')
 const config=require('./../config')
 // const ListController = require('../controllers/list')
@@ -12,5 +13,10 @@ router.post('/login', UserController.postLogin)  // 登录
 router.post('/tags',verify, TagController.createTag)  // 创建tag
 router.get('/tags',verify,TagController.getAllTag)//获得全部tag
 router.delete('/tags/:id',verify,TagController.deleteTag)//删除tag
-
+router.get('/articles', verify, ArticleController.getAllArticles)
+.post('/articles', verify, ArticleController.createArticle)
+.patch('/articles/:id', verify, ArticleController.modifyArticle)
+.get('/articles/:id', ArticleController.getArticle)
+.delete('/articles/:id', verify, ArticleController.deleteArticle)
+.get('/publishArticles', ArticleController.getAllPublishArticles)
 module.exports = router

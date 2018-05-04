@@ -12,17 +12,21 @@
           <i class="el-icon-document"></i>
           <span>文章</span>
         </template>
-        <el-menu-item index="/article">
+        <el-menu-item index="/articles">
             <span slot="title">文章列表</span>
         </el-menu-item>
         <el-menu-item index="/category">
             <span slot="title">文章标签</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="/mdedit">
+      <el-menu-item index="/mdEdit">
         <i class="el-icon-plus"></i>
         <span slot="title">发布文章</span>
       </el-menu-item>
+      <!-- <el-menu-item index="/mavonEdit">
+        <i class="el-icon-plus"></i>
+        <span slot="title">mavon发布文章</span>
+      </el-menu-item> -->
       <el-menu-item index="/">
         <i class="el-icon-setting"></i>
         <span slot="title">设置</span>

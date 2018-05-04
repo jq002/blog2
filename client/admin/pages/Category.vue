@@ -40,7 +40,7 @@ export default {
     getAllTags() {
       api.getAllTags().then(res => {
         if (res.data.success) {
-          this.dynamicTags = res.data.tags;
+          this.dynamicTags = res.data.tagArr;
         } else {
           this.dynamicTags = [];
         }

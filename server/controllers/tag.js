@@ -36,7 +36,7 @@ class TagController{
         });
         ctx.body={
             success:true,
-            tags:tagArr
+            tagArr
         }
     }
     static async  deleteTag(ctx) {
