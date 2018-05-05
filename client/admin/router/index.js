@@ -4,9 +4,10 @@ import Articles from './../pages/Articles.vue'
 import Category from './../pages/Category.vue'
 import HelloWorld from './../components/HelloWorld.vue'
 import MarkdownEditor from './../pages/MarkdownEditor.vue'
-import MavonEditor from './../pages/MavonEditor.vue'
 import Login from './../pages/Login.vue'
 import Home from './../pages/Home.vue'
+import Detail from '../pages/Detail.vue'
+import Edit from '../pages/Edit.vue'
 
 Vue.use(Router)
 
@@ -35,14 +36,17 @@ export default new Router({
       },
       {
         name: 'MarkdownEditor',
-        path: '/mdEdit',
+        path: '/mdEdit/',
         component: MarkdownEditor
-      },
-      {
-        name: 'MavonEditor',
-        path: '/mavonEdit',
-        component: MavonEditor
-      },
+      },{
+        name:"Detail",
+        path:"/detail/:id",
+        component:Detail
+      },{
+        name:"Edit",
+        path:"/edit/:id",
+        component:Edit
+      }
     ]
   } ,{
     path: '*',

@@ -25,6 +25,7 @@ export default {
     return Axios.get(`/api/publishArticles?tags=${tags}&page=${page}&limit=${limit}`)
   },
   createArticle(title, content, publish, tags) {
+    console.log(tags)
     // let abstract;
     // if (content.indexOf("<!--more-->") !== -1) {
     //   abstract = content.split("<!--more-->")[0];

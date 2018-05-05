@@ -31,6 +31,15 @@
         <el-tag  v-for="tag in scope.row.tags" :key="tag.id" disable-transitions>{{tag.name}}</el-tag>
       </template>
     </el-table-column>
+     <el-table-column
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button @click="handleLook(scope.row)" type="text" size="small">查看</el-button>
+        <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
+      </template>
+    </el-table-column>
   </el-table>
     <el-pagination
       @size-change="handleSizeChange"
@@ -55,12 +64,12 @@ export default {
   data() {
     return {
       data: null,
-      articleArr:[],
+      articleArr: [],
       // allPage,
-      page:1,
-      allNum:1,
+      page: 1,
+      allNum: 1,
       limit: 5,
-      tags:[]
+      tags: []
     };
   },
   created() {
@@ -69,11 +78,11 @@ export default {
   },
   methods: {
     handleSizeChange(limit) {
-      this.limit=limit;
+      this.limit = limit;
       this.getAllArticles();
     },
     handleCurrentChange(page) {
-      this.page=page;
+      this.page = page;
       this.getAllArticles();
     },
     prevClick() {
@@ -84,15 +93,32 @@ export default {
       this.page++;
       this.getAllArticles();
     },
+    handleLook(val) {
+      console.log(val);
+      this.$router.push({
+        name: "Detail",
+        params: {
+          id: val.id
+        }
+      });
+    },
+    handleEdit(val) {
+      this.$router.push({
+        name: "Edit",
+        params: {
+          id: val.id
+        }
+      });
+    },
+
     getAllArticles() {
-      
-      api.getAllArticles(this.page,this.limit,this.tags).then(res => {
+      api.getAllArticles(this.page, this.limit, this.tags).then(res => {
         if (res.data.success) {
           this.data = res.data;
-          this.articleArr=res.data.articleArr;
-          this.page=res.data.page;
-          this.allNum=res.data.allNum;
-          this.$message.success("查询成功");
+          this.articleArr = res.data.articleArr;
+          this.page = res.data.page;
+          this.allNum = res.data.allNum;
+          // this.$message.success("查询成功");
         }
       });
     }

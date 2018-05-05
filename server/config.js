@@ -1,7 +1,7 @@
 
 module.exports = {
     app: {
-        port: process.env.PORT || 8887,
+        port: process.env.PORT || 8886,
         baseApi: '/api'
       },
       mongodb: {

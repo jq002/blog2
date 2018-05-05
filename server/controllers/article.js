@@ -181,7 +181,7 @@ class ArticleController {
       ctx.throw(400, 'id不能为空')
     }
 
-    const article = await Article.findById(id).catch(err => {
+    const article = await Article.findById(id).populate('tags').catch(err => {
       if (err.name === 'CastError') {
         ctx.throw(400, 'id不存在');
       } else {

@@ -25,7 +25,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 router.beforeEach((to,from,next)=>{
-  console.log(store.state);
+  // console.log(store.state);
   if(to.meta.authPage){
     if(store.state.token){
       next('/admin')

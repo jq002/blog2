@@ -1,15 +1,10 @@
 <template>
     <div class="container">
-      <h3 class="title is-3">发布一篇新的文章</h3>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top">
-        <!-- <el-form-item label="文章分类" prop="tags">
-          <el-select v-model="form.tags" value-key="id" placeholder="请选择文章分类">
-            <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag"></el-option>
-          </el-select>
-        </el-form-item> -->
+      <h3 class="title is-3">编辑文章</h3>
+      <el-form ref="form" v-if="form&&tags" :model="form" :rules="rules" label-width="80px" label-position="top">
         <el-form-item label="文章分类"  prop="tags">
-          <el-checkbox-group v-model="form.tags">
-            <el-checkbox v-for="tag in tags" :key="tag.id" :label="tag.name"></el-checkbox>
+          <el-checkbox-group v-model="formTags">
+            <el-checkbox v-for="tag in tags" :key="tag.id" :label="tag.name" :checked="tag.checked"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="文章标题" prop="title">
@@ -19,7 +14,7 @@
           <label class="el-form-item__label">文章内容</label>
           <div class="el-form-item__content">
               <div id="editor">
-                <textarea :value="content" @input="update"></textarea>
+                <textarea :value="form.content" @input="update"></textarea>
                 <div v-html="compiledMarkdown"  v-highlight></div>
               </div>
             <div v-if="validate.error" class="el-form-item__error">正文则能没有内容呢？</div>
@@ -27,7 +22,6 @@
         </div>
           <el-form-item>
             <el-button type="primary" @click="submit" @keyup.enter="submit">保存文章</el-button>
-            <el-button type="primary" @click="publish" @keyup.enter="publish">发布文章</el-button>
           </el-form-item>
       </el-form>
     </div>
@@ -39,21 +33,23 @@ import marked from "marked";
 import api from "./../../api/login";
 let ArticleHtml;
 export default {
-  name: "MarkdownEditor",
+  name: "Edit",
   data() {
     return {
-      content: "",
       tags: [],
-      form: {
-        tags: [],
-        title: ""
-      },
+      form: "",
+      formTags:[],
       rules: {
         title: [
           { required: true, message: "必须填写标题哦！", trigger: "blur" }
         ],
         tags: [
-           { type: 'array', required: true, message: '必须填写分类哦！', trigger: 'change' }
+          {
+            type: "array",
+            required: true,
+            message: "必须填写分类哦！",
+            trigger: "change"
+          }
         ]
       },
       validate: {
@@ -62,35 +58,52 @@ export default {
     };
   },
   created() {
-    this.getAllTags();
+    let id = this.$route.params.id;
+    Promise.all([this.getAllTags(), this.getArticle(id)]).then(res => {
+      if (res[0].data.success) {
+        this.tags = res[0].data.tagArr;
+      } else {
+        this.tags = [];
+      }
+      if (res[1].data.success) {
+        this.form = res[1].data.article;
+        this.tags.forEach((x,i) => {
+          
+          if(this.form.tags.some(y => {
+            return x.id === y.id;
+          })){
+              this.tags[i].checked=true;
+          }else{
+              this.tags[i].checked=false;
+          }
+  
+        });
+      }
+    });
+    // this.getAllTags();
   },
   computed: {
     compiledMarkdown: function() {
-      // this.ArticleHtml=marked(this.content, { sanitize: true });
-      return marked(this.content, { sanitize: true });
+      //   this.ArticleHtml = marked(this.article.content, { sanitize: true });
+      return marked(this.form.content, { sanitize: true });
     }
   },
   methods: {
     update: _.debounce(function(e) {
-      this.content = e.target.value;
+      this.form.content = e.target.value;
     }, 300),
     getAllTags() {
-      api.getAllTags().then(res => {
-        if (res.data.success) {
-          this.tags = res.data.tagArr;
-        } else {
-          this.tags = [];
-        }
-      });
+      return api.getAllTags();
+    },
+    getArticle(id) {
+      return api.getArticle(id);
     },
     validateContent() {
-      if (!this.content) {
+      if (!this.form.content) {
         this.validate.error = true;
-        // $(".wangEditor-container").css({ borderColor: "red" });
         return false;
       } else {
         this.validate.error = false;
-        // $(".wangEditor-container").css({ borderColor: "#ccc" });
         return true;
       }
     },
@@ -98,36 +111,39 @@ export default {
       this.$refs.form.validate(valid => {
         let me = this.validateContent();
         if (valid && me) {
-          let tags=this.tags.filter(x=>{
-            return this.form.tags.some(y=>{
-              return x.name===y
-            })
-          })
-          api
-            .createArticle(this.form.title, this.content, false, tags)
-            .then(res => {
-              if (res.data.success) {
-                this.$message.success("文章创建成功");
-                // console.log(res.data.article);
-                this.$router.replace({
-                  name:'Detail',
-                  params:{
-                    id:res.data.article.id
-                  }
-                })
-              } else {
-                this.$message.success("文章创建失败");
-              }
+          this.form.tags = this.tags.filter(x => {
+            return this.formTags.some(y => {
+              return x.name === y;
             });
+          });
+          let article={
+              title:"",
+              content:"",
+              tags:[]
+          };
+          article.title=this.form.title;
+          article.content=this.form.content;
+          article.tags=this.form.tags;
+          api.saveArticle(this.$route.params.id, article).then(res => {
+            if (res.data.success) {
+              this.$message.success("文章修改成功");
+              // console.log(res.data.article);
+              this.$router.replace({
+                name: "Detail",
+                params: {
+                  id: res.data.article.id
+                }
+              });
+            } else {
+              this.$message.success("文章修改失败");
+            }
+          });
         } else {
           console.log("error submit!!!");
           this.$message.error("您填写的信息有误，请按照提示修改");
           return false;
         }
       });
-    },
-    publish(){
-
     }
   }
 };
