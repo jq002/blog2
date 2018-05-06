@@ -16,7 +16,10 @@ router.delete('/tags/:id',verify,TagController.deleteTag)//删除tag
 router.get('/articles', verify, ArticleController.getAllArticles)
 .post('/articles', verify, ArticleController.createArticle)
 .patch('/articles/:id', verify, ArticleController.modifyArticle)
-.get('/articles/:id', ArticleController.getArticle)
+.patch('/publishArticles/:id', verify,ArticleController.publishArticle)
 .delete('/articles/:id', verify, ArticleController.deleteArticle)
+
+.get('/articles/:id', ArticleController.getArticle)
 .get('/publishArticles', ArticleController.getAllPublishArticles)
+
 module.exports = router

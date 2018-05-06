@@ -10,10 +10,6 @@ import store from './store';
 import Axios from 'axios'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css' //样式文件
-// import mavonEditor from 'mavon-editor'
-// import 'mavon-editor/dist/css/index.css'
-// use
-// Vue.use(mavonEditor)
 Vue.directive('highlight',function (el) {
   let blocks = el.querySelectorAll('pre code');
   blocks.forEach((block)=>{

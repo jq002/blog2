@@ -21,30 +21,22 @@ export default {
   getAllArticles(page = 1, limit = 1,tags = '' ) {
     return Axios.get(`/api/articles?tags=${tags}&page=${page}&limit=${limit}`)
   },
-  getAllPublishArticles(page = 1, limit = 1,tags = '') {
+  getAllPublishArticles(page = 1, limit = 1,tags ='') {
     return Axios.get(`/api/publishArticles?tags=${tags}&page=${page}&limit=${limit}`)
   },
   createArticle(title, content, publish, tags) {
-    console.log(tags)
-    // let abstract;
-    // if (content.indexOf("<!--more-->") !== -1) {
-    //   abstract = content.split("<!--more-->")[0];
-    // } else {
-    //   abstract = '';
-    // }
     return Axios.post('/api/articles', { title, content, publish, tags })
   },
   saveArticle(id, article) {
-    console.log(article)
     return Axios.patch('/api/articles/' + id, article)
   },
   publishArticle(id) {
-    return Axios.patch('/api/articles/' + id, {
+    return Axios.patch('/api/publishArticles/' + id, {
       "publish": true
     })
   },
   notPublishArticle(id) {
-    return Axios.patch('/api/articles/' + id, {
+    return Axios.patch('/api/publishArticles/' + id, {
       "publish": false
     })
   },

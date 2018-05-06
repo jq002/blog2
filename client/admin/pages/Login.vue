@@ -46,7 +46,7 @@ export default {
             if (res.data.success) {
               this.$message.success("登录成功");
               this.$router.push({
-                name: "Home"
+                name: "Helloworld"
               });
             }
           }).catch((err)=>{
@@ -55,7 +55,6 @@ export default {
           });
 
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

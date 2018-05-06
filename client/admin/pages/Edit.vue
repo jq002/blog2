@@ -31,7 +31,6 @@
 import _ from "lodash";
 import marked from "marked";
 import api from "./../../api/login";
-let ArticleHtml;
 export default {
   name: "Edit",
   data() {
@@ -84,7 +83,6 @@ export default {
   },
   computed: {
     compiledMarkdown: function() {
-      //   this.ArticleHtml = marked(this.article.content, { sanitize: true });
       return marked(this.form.content, { sanitize: true });
     }
   },
@@ -127,7 +125,6 @@ export default {
           api.saveArticle(this.$route.params.id, article).then(res => {
             if (res.data.success) {
               this.$message.success("文章修改成功");
-              // console.log(res.data.article);
               this.$router.replace({
                 name: "Detail",
                 params: {
@@ -139,7 +136,6 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!!");
           this.$message.error("您填写的信息有误，请按照提示修改");
           return false;
         }

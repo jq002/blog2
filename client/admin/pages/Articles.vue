@@ -8,20 +8,20 @@
       prop="lastEditTime"
       label="修改日期"
       sortable
-      width="200"
+      width="160"
     >
     </el-table-column>
       <el-table-column
     prop="createTime"
     label="创建日期"
     sortable
-    width="200"
+    width="160"
     >
     </el-table-column>
     <el-table-column
       prop="title"
-      label="姓名"
-      width="180">
+      label="标题"
+      width="200">
     </el-table-column>
     <el-table-column
       prop="tags"
@@ -34,10 +34,13 @@
      <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+      width="140">
       <template slot-scope="scope">
         <el-button @click="handleLook(scope.row)" type="text" size="small">查看</el-button>
         <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
+        <el-button class='delete' @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
+        <el-button v-if="scope.row.publish" type="warning" plain @click="notPublish(scope.row)" size="mini">撤回</el-button>
+        <el-button v-else type="success" plain @click="publish(scope.row)" size="mini">发布</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -73,8 +76,7 @@ export default {
     };
   },
   created() {
-    let limit = this.limit;
-    this.getAllArticles({ limit });
+    this.getAllArticles();
   },
   methods: {
     handleSizeChange(limit) {
@@ -94,7 +96,6 @@ export default {
       this.getAllArticles();
     },
     handleLook(val) {
-      console.log(val);
       this.$router.push({
         name: "Detail",
         params: {
@@ -110,7 +111,44 @@ export default {
         }
       });
     },
-
+    handleDelete(val) {
+      this.$confirm("确定删除该文章吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          api.deleteArticle(val.id).then(res => {
+            if (res.data.success) {
+              this.getAllArticles();
+              this.$message.success("删除成功");
+            } else {
+              this.$message.success("删除失败");
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    publish(val) {
+      api.publishArticle(val.id).then(res => {
+        if (res.data.success) {
+          this.getAllArticles();
+          this.$message.success("发布成功");
+        } else {
+          this.$message.success("发布失败");
+        }
+      });
+    },    
+    notPublish(val) {
+      api.notPublishArticle(val.id).then(res => {
+        if (res.data.success) {
+          this.getAllArticles();
+          this.$message.success("撤回成功");
+        } else {
+          this.$message.success("撤回失败");
+        }
+      });
+    },
     getAllArticles() {
       api.getAllArticles(this.page, this.limit, this.tags).then(res => {
         if (res.data.success) {
@@ -130,6 +168,9 @@ export default {
 .container {
   .el-pagination {
     margin: 40px 0;
+  }
+  .delete{
+    color: red;
   }
 }
 </style>

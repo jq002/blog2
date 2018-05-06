@@ -25,26 +25,30 @@ export default new Router({
     component: Home,
     name: 'Home',
     children: [{
+      name:'Helloworld',
+      path:'/admin',
+      component:HelloWorld
+    },{
         name: 'Articles',
-        path: '/articles',
+        path: 'articles',
         component: Articles
       },
       {
         name: 'Category',
-        path: '/category',
+        path: 'category',
         component: Category
       },
       {
         name: 'MarkdownEditor',
-        path: '/mdEdit/',
+        path: 'mdEdit',
         component: MarkdownEditor
       },{
         name:"Detail",
-        path:"/detail/:id",
+        path:"detail/:id",
         component:Detail
       },{
         name:"Edit",
-        path:"/edit/:id",
+        path:"edit/:id",
         component:Edit
       }
     ]

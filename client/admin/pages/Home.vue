@@ -20,16 +20,27 @@
 
 <script>
 import MyMenu from "./../components/MyMenu.vue";
+import { mapMutations } from "vuex";
 export default {
   name: "Home",
   components: { MyMenu },
-  methods:{
-      loginOut(){
-          this.$router.replace({
-              name:'Login'
-          });
-           this.$message.success("退出成功");
-      }
+  methods: {
+    ...mapMutations({
+      deleteToken: "DELETE_TOKEN"
+    }),
+    loginOut() {
+      this.$confirm("退出系统？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.deleteToken();
+        this.$router.replace({
+          name: "Login"
+        });
+      }).catch(() => {
+      });
+    }
   }
 };
 </script>
@@ -69,7 +80,7 @@ export default {
         text-align: right;
         padding-right: 20px;
         .el-button--text {
-            color: #fff;
+          color: #fff;
         }
       }
     }

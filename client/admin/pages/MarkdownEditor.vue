@@ -27,7 +27,7 @@
         </div>
           <el-form-item>
             <el-button type="primary" @click="submit" @keyup.enter="submit">保存文章</el-button>
-            <el-button type="primary" @click="publish" @keyup.enter="publish">发布文章</el-button>
+            <!-- <el-button type="primary" @click="publish" @keyup.enter="publish">发布文章</el-button> -->
           </el-form-item>
       </el-form>
     </div>
@@ -108,7 +108,6 @@ export default {
             .then(res => {
               if (res.data.success) {
                 this.$message.success("文章创建成功");
-                // console.log(res.data.article);
                 this.$router.replace({
                   name:'Detail',
                   params:{
@@ -120,7 +119,6 @@ export default {
               }
             });
         } else {
-          console.log("error submit!!!");
           this.$message.error("您填写的信息有误，请按照提示修改");
           return false;
         }

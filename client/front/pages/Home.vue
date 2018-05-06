@@ -1,60 +1,21 @@
 <template>
   <div class="container">
       <div class="list">
-          <article>
-                <h1> <router-link to="/article" class="title">第一篇文章</router-link></h1>
-                <div class="article-content">需要调起微信APP，就要操作，相应系统的APP，
-                  就需要原生操作系统调用。除非JS能操作原生的操作系统，那是没有的，
-                  JS需要专门的引擎，比如V8引擎，进行编译
+          <article v-for="article in articleArr" :key="article.id">
+                <h1> <router-link :to="{ name: 'Article', params: { id: article.id }}" class="title">{{article.title}}</router-link></h1>
+                <div class="article-content">{{article.content}}
                 </div>
-                <router-link to="/article" class="more">点击阅读更多</router-link>
+                <router-link :to="{ name: 'Article', params: { id: article.id }}" class="more">点击阅读更多</router-link>
                 <div class="article-data">
                     <ul class="article-tags">
-                        <li><a href="">JavaScript</a></li>
-                        <li><a href="">vue</a></li>
+                        <li  v-for="tag in article.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
                     </ul>
                     <div class="article-other">
-                        <div class="article-other-count"><span>630</span>阅读</div>
-                        <div class="article-other-time"><span>2018年 01月12日</span></div>                        
+                        <div class="article-other-count"><span>0</span>阅读</div>
+                        <div class="article-other-time"><span>{{article.lastEditTime}}</span></div>                        
                     </div>
                 </div> 
-          </article> 
-          <article>
-                <h1> <router-link to="/article" class="title">第一篇文章</router-link></h1>
-                <div class="article-content">需要调起微信APP，就要操作，相应系统的APP，
-                  就需要原生操作系统调用。除非JS能操作原生的操作系统，那是没有的，
-                  JS需要专门的引擎，比如V8引擎，进行编译
-                </div>
-                <router-link to="/article" class="more">点击阅读更多</router-link>
-                <div class="article-data">
-                    <ul class="article-tags">
-                        <li><a href="">JavaScript</a></li>
-                        <li><a href="">vue</a></li>
-                    </ul>
-                    <div class="article-other">
-                        <div class="article-other-count"><span>630</span>阅读</div>
-                        <div class="article-other-time"><span>2018年 01月12日</span></div>                        
-                    </div>
-                </div> 
-          </article>                          
-          <article>
-                <h1> <router-link to="/article" class="title">第一篇文章</router-link></h1>
-                <div class="article-content">需要调起微信APP，就要操作，相应系统的APP，
-                  就需要原生操作系统调用。除非JS能操作原生的操作系统，那是没有的，
-                  JS需要专门的引擎，比如V8引擎，进行编译
-                </div>
-                <router-link to="/article" class="more">点击阅读更多</router-link>
-                <div class="article-data">
-                    <ul class="article-tags">
-                        <li><a href="">JavaScript</a></li>
-                        <li><a href="">vue</a></li>
-                    </ul>
-                    <div class="article-other">
-                        <div class="article-other-count"><span>630</span>阅读</div>
-                        <div class="article-other-time"><span>2018年 01月12日</span></div>                        
-                    </div>
-                </div> 
-          </article>       
+          </article>     
       </div>
         <my-paging></my-paging>             
 
@@ -63,10 +24,34 @@
 
 <script>
 import MyPaging from "./../components/MyPaging.vue";
-
+import api from "../../api/login";
 export default {
   name: "Home",
-  components: { MyPaging }
+  components: { MyPaging },
+  data() {
+    return {
+      articleArr: [],
+      page: 1,
+      allNum: 1,
+      limit: 5,
+      tags: []
+    };
+  },
+  created() {
+    this.getPublishArticles();
+  },
+  methods: {
+    getPublishArticles() {
+      api.getAllPublishArticles(this.page, this.limit, this.tags).then(res => {
+        if (res.data.success) {
+          // this.data = res.data;
+          this.articleArr = res.data.articleArr;
+          this.page = res.data.page;
+          this.allNum = res.data.allNum;
+        }
+      });
+    }
+  }
 };
 </script>
 

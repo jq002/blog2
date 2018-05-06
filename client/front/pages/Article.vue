@@ -2,19 +2,18 @@
   <div class="container">
       <article>
           <header>
-              <h1>搭建qin博客过程及使用技术</h1>
+              <h1>{{article.title}}</h1>
               <div class="article-data">
-                    <ul class="article-tags">
-                        <li><a href="">JavaScript</a></li>
-                        <li><a href="">vue</a></li>
+                    <ul class="article-tags" > 
+                        <li  v-for="tag in article.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
                     </ul>
                     <div class="article-other">
                         <div class="article-other-count"><span>630</span>阅读</div>
-                        <div class="article-other-time"><span>2018年 01月12日</span></div>                        
+                        <div class="article-other-time"><span>{{article.lastEditTime}}</span></div>                        
                     </div>
                 </div> 
           </header>
-          <div class="content"></div>
+          <div class="content" v-html="compiledMarkdown" v-highlight></div>
           <footer>
               <p>下一篇</p>
               <router-link class="title" to="/article">纯css实现箭头</router-link>
@@ -24,8 +23,35 @@
 </template>
 
 <script>
+import api from "../../api/login";
+import marked from "marked";
 export default {
-  name: "Article"
+  name: "Article",
+  data() {
+    return {
+      article: "",
+      content:""
+    };
+  },
+  computed: {
+    compiledMarkdown: function() {
+      return marked(this.content, { sanitize: true });
+    }
+  },
+  created() {
+    let id = this.$route.params.id;
+    this.getArticle(id);
+  },
+  methods: {
+    getArticle(id) {
+      api.getArticle(id).then(res => {
+        if (res.data.success) {
+          this.article = res.data.article;
+          this.content=this.article.content
+        }
+      });
+    }
+  }
 };
 </script>
 

@@ -4,6 +4,14 @@ import './assets/global.css'
 import {createRouter} from './router/index'
 import {createStore} from './store/index'
 import { sync}from 'vuex-router-sync'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css' //样式文件
+Vue.directive('highlight',function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)
+  })
+})
 
 // 导出一个工厂函数，用于创建新的
 // 应用程序、router 和 store 实例

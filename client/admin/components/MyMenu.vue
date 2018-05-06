@@ -7,7 +7,7 @@
       :router="true"
       @open="handleOpen"
       @close="handleClose">
-      <el-submenu index="1">
+      <!-- <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-document"></i>
           <span>文章</span>
@@ -18,18 +18,24 @@
         <el-menu-item index="/category">
             <span slot="title">文章标签</span>
         </el-menu-item>
-      </el-submenu>
-      <el-menu-item index="/mdEdit">
+      </el-submenu> -->
+      <el-menu-item index="/admin/articles">
+          <span slot="title">文章列表</span>
+      </el-menu-item>
+      <el-menu-item index="/admin/category">
+          <span slot="title">文章标签</span>
+      </el-menu-item>
+      <el-menu-item index="/admin/mdEdit">
         <i class="el-icon-plus"></i>
-        <span slot="title">发布文章</span>
+        <span slot="title">写文章</span>
       </el-menu-item>
       <!-- <el-menu-item index="/mavonEdit">
         <i class="el-icon-plus"></i>
         <span slot="title">mavon发布文章</span>
       </el-menu-item> -->
-      <el-menu-item index="/">
+      <el-menu-item index="/admin">
         <i class="el-icon-setting"></i>
-        <span slot="title">设置</span>
+        <span slot="title">我</span>
       </el-menu-item>
     </el-menu>
   </menu>
@@ -41,7 +47,7 @@ export default {
   data() {
     return {
       isCollapse: false,
-      activeIndex: "/"
+      activeIndex: "/admin"
     };
   },
   created() {
