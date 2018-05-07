@@ -11,7 +11,7 @@ const router = new Router({
 UserController.initUser();
 router.post('/login', UserController.postLogin)  // 登录
 router.post('/tags',verify, TagController.createTag)  // 创建tag
-router.get('/tags',verify,TagController.getAllTag)//获得全部tag
+router.get('/tags',TagController.getAllTag)//获得全部tag
 router.delete('/tags/:id',verify,TagController.deleteTag)//删除tag
 router.get('/articles', verify, ArticleController.getAllArticles)
 .post('/articles', verify, ArticleController.createArticle)

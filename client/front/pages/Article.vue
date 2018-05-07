@@ -2,18 +2,18 @@
   <div class="container">
       <article>
           <header>
-              <h1>{{article.title}}</h1>
+              <h1>{{currentArticle.title}}</h1>
               <div class="article-data">
                     <ul class="article-tags" > 
-                        <li  v-for="tag in article.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
+                        <li  v-for="tag in currentArticle.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
                     </ul>
                     <div class="article-other">
-                        <div class="article-other-count"><span>630</span>阅读</div>
-                        <div class="article-other-time"><span>{{article.lastEditTime}}</span></div>                        
+                        <!-- <div class="article-other-count"><span>630</span>阅读</div> -->
+                        <div class="article-other-time"><span>{{currentArticle.lastEditTime}}</span></div>                        
                     </div>
                 </div> 
           </header>
-          <div class="content" v-html="compiledMarkdown" v-highlight></div>
+          <div class="content" v-html="currentArticleCompile" v-highlight></div>
           <footer>
               <p>下一篇</p>
               <router-link class="title" to="/article">纯css实现箭头</router-link>
@@ -25,32 +25,35 @@
 <script>
 import api from "../../api/login";
 import marked from "marked";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "Article",
   data() {
     return {
-      article: "",
-      content:""
+      // article: "",
+      // content: ""
     };
   },
   computed: {
-    compiledMarkdown: function() {
-      return marked(this.content, { sanitize: true });
-    }
+    ...mapGetters(["currentArticle", "currentArticleCompile"])
   },
-  created() {
+  beforeMount() {
     let id = this.$route.params.id;
+    if (this.currentArticle && this.currentArticle.id == id) {
+      return;
+    }
     this.getArticle(id);
   },
+  asyncData({ store, route }) {
+    return store.dispatch("getArticle", route.params.id).then(() => {});
+  },
+  // created() {
+  //   let id = this.$route.params.id;
+  //   this.getArticle(id);
+  // },
   methods: {
-    getArticle(id) {
-      api.getArticle(id).then(res => {
-        if (res.data.success) {
-          this.article = res.data.article;
-          this.content=this.article.content
-        }
-      });
-    }
+    ...mapActions(["getArticle"])
   }
 };
 </script>

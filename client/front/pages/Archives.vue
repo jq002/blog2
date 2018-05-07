@@ -3,28 +3,18 @@
      <div class="search">
          <input type="text" placeholder="搜索">
      </div>
-     <ul class="tags">
-         <li> <a href=""> show all<sup>13</sup></a></li>
-         <li> <a href="">JavaScript<sup>2</sup></a></li>
-         <li><a href="">node.js<sup>1</sup> </a></li>
-         <li> <a href="">vue<sup>3</sup></a></li>
-         <li> <a href="">mongoDB<sup>3</sup></a></li>
+     <ul class="tags" >
+         <li v-for="tag in tags" :key="tag.id"> <a href=""> {{tag.name}}<sup>13</sup></a></li>
      </ul>
      <div class="list">
          <section>
              <h2>2018</h2>
              <ul>
-                 <li><span class="date">5月2日</span><a href="">搭建qin博客过程及使用技术</a></li>
-                 <li><span class="date">5月2日</span><a href="">搭建qin过程</a></li>
-                 <li><span class="date">5月2日</span><a href="">搭建qin博客使用技术</a></li>
-                 <li><span class="date">5月2日</span><a href="">搭建qin过程及使用技术</a></li>
-             </ul>
-         </section>
-        <section>
-             <h2>2017</h2>
-             <ul>
-                 <li><span class="date">10月2日</span><a href="">搭建qin博客过程及使用技术</a></li>
-                 <li><span class="date">07月2日</span><a href="">搭建qin过程</a></li>
+                 <li v-for="article in articles" :key="article.id">
+                   <span class="date">{{article.lastEditTime}}</span>
+                   <router-link :to="'/article/'+article.id"  class="title">{{article.title}}</router-link>
+                </li>
+
              </ul>
          </section>
      </div>
@@ -32,14 +22,38 @@
 </template>
 
 <script>
+import {mapGetters,mapActions} from 'vuex'
+
 export default {
-  name: "Archives"
+  name: "Archives",
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["articles", "tags", "curPage", "allNum"])
+  },
+    beforeMount() {
+    if (this.articles &&  this.articles.length!==0) {
+      return;
+    }
+    this.getAllArticles();
+    this.getAllTags();
+  },
+  asyncData({ store, route }) {
+    store.dispatch("getAllTags");
+    return store
+      .dispatch("getAllArticles", { page: route.params.page })
+      .then(() => {});
+  },
+  methods: {
+    ...mapActions(["getAllArticles", "getAllTags"])
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .container {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
   .search {
     margin: 1.5rem 0;
     input {
