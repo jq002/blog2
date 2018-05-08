@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-      <article>
           <header>
-              <h1>{{currentArticle.title}}</h1>
+                  <h1>{{currentArticle.title}}</h1>
+
               <div class="article-data">
                     <ul class="article-tags" > 
-                        <li  v-for="tag in currentArticle.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
+                        <li  v-for="tag in currentArticle.tags" :key="tag.id"><a>{{tag.name}}</a></li>
                     </ul>
                     <div class="article-other">
                         <!-- <div class="article-other-count"><span>630</span>阅读</div> -->
@@ -13,11 +13,14 @@
                     </div>
                 </div> 
           </header>
-          <div class="content" v-html="currentArticleCompile" v-highlight></div>
-          <footer>
+      <article class="markdown-body">
+
+          <section class="abstract-content">{{ currentArticle.abstract}}</section>
+          <section class="content" v-html="currentArticleCompile" v-highlight></section>
+          <!-- <footer>
               <p>下一篇</p>
               <router-link class="title" to="/article">纯css实现箭头</router-link>
-          </footer>
+          </footer> -->
       </article>
   </div>
 </template>
@@ -30,10 +33,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Article",
   data() {
-    return {
-      // article: "",
-      // content: ""
-    };
+    return {};
   },
   computed: {
     ...mapGetters(["currentArticle", "currentArticleCompile"])
@@ -48,10 +48,6 @@ export default {
   asyncData({ store, route }) {
     return store.dispatch("getArticle", route.params.id).then(() => {});
   },
-  // created() {
-  //   let id = this.$route.params.id;
-  //   this.getArticle(id);
-  // },
   methods: {
     ...mapActions(["getArticle"])
   }
@@ -74,11 +70,13 @@ export default {
           a {
             background-color: #f2f2f2;
             color: #333;
+            // background-color: rgba(252, 77, 80, 0.4);
+            // color: #fff;
             padding: 2px 10px;
             border-radius: 2rem;
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 700;
+            font-weight: 600;
 
             &:hover {
               background-color: #fc4d50;
@@ -101,6 +99,11 @@ export default {
         }
       }
     }
+  }
+  .abstract-content{
+    border-bottom: dotted 2px #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
   }
   footer {
     margin: 2.8rem 0 1.4rem 0;

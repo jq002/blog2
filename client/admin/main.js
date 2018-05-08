@@ -6,6 +6,8 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/global.css';
+import './assets/mkdown.css'
+
 import store from './store';
 import Axios from 'axios'
 import hljs from 'highlight.js'

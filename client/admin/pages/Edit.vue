@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container-add">
       <h3 class="title is-3">编辑文章</h3>
       <el-form ref="form" v-if="form&&tags" :model="form" :rules="rules" label-width="80px" label-position="top">
         <el-form-item label="文章分类"  prop="tags">
@@ -10,18 +10,23 @@
         <el-form-item label="文章标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入文章标题"></el-input>
         </el-form-item>
+        <el-form-item label="文章摘要" prop="abstract">
+          <el-input type="textarea" v-model="form.abstract"  class="abstract"></el-input>
+        </el-form-item>
         <div class="el-form-item is-required" :class="{'is-error':validate.error}">
           <label class="el-form-item__label">文章内容</label>
           <div class="el-form-item__content">
               <div id="editor">
-                <textarea :value="form.content" @input="update"></textarea>
-                <div v-html="compiledMarkdown"  v-highlight></div>
+                <textarea :value="form.content" @input="update"  v-bind:class="[{ active: !isLookArticle }]"></textarea>
+                <div v-html="compiledMarkdown"  v-highlight  v-bind:class="[{ active: isLookArticle }, 'editor-show','markdown-body']"></div>
               </div>
             <div v-if="validate.error" class="el-form-item__error">正文则能没有内容呢？</div>
           </div>
         </div>
           <el-form-item>
             <el-button type="primary" @click="submit" @keyup.enter="submit">保存文章</el-button>
+            <el-button @click="lookArticle" v-if="isLookArticle">继续编辑</el-button>
+            <el-button @click="lookArticle" v-else>预览文章</el-button>            
           </el-form-item>
       </el-form>
     </div>
@@ -35,12 +40,17 @@ export default {
   name: "Edit",
   data() {
     return {
+            isLookArticle: false,
+
       tags: [],
       form: "",
-      formTags:[],
+      formTags: [],
       rules: {
         title: [
           { required: true, message: "必须填写标题哦！", trigger: "blur" }
+        ],
+        abstract: [
+          { required: true, message: "必须填写摘要", trigger: "blur" }
         ],
         tags: [
           {
@@ -66,16 +76,16 @@ export default {
       }
       if (res[1].data.success) {
         this.form = res[1].data.article;
-        this.tags.forEach((x,i) => {
-          
-          if(this.form.tags.some(y => {
-            return x.id === y.id;
-          })){
-              this.tags[i].checked=true;
-          }else{
-              this.tags[i].checked=false;
+        this.tags.forEach((x, i) => {
+          if (
+            this.form.tags.some(y => {
+              return x.id === y.id;
+            })
+          ) {
+            this.tags[i].checked = true;
+          } else {
+            this.tags[i].checked = false;
           }
-  
         });
       }
     });
@@ -105,6 +115,9 @@ export default {
         return true;
       }
     },
+        lookArticle() {
+      this.isLookArticle = !this.isLookArticle;
+    },
     submit() {
       this.$refs.form.validate(valid => {
         let me = this.validateContent();
@@ -114,14 +127,15 @@ export default {
               return x.name === y;
             });
           });
-          let article={
-              title:"",
-              content:"",
-              tags:[]
+          let article = {
+            title: "",
+            content: "",
+            tags: []
           };
-          article.title=this.form.title;
-          article.content=this.form.content;
-          article.tags=this.form.tags;
+          article.title = this.form.title;
+          article.abstract = this.form.abstract;
+          article.content = this.form.content;
+          article.tags = this.form.tags;
           api.saveArticle(this.$route.params.id, article).then(res => {
             if (res.data.success) {
               this.$message.success("文章修改成功");
@@ -145,32 +159,5 @@ export default {
 };
 </script>
 
-<style scoped lang='scss'>
-.container {
-  // height: 100%;
-  #editor {
-    // height: 50%;
-    & > div {
-      border: 1px solid #ccc;
-    }
-    textarea,
-    & > div {
-      display: inline-block;
-      width: 49%;
-      height: 400px;
-      vertical-align: top;
-      box-sizing: border-box;
-      padding: 0 20px;
-    }
-    textarea {
-      border: none;
-      resize: none;
-      outline: none;
-      background-color: #f6f6f6;
-      font-size: 14px;
-      font-family: "Monaco", courier, monospace;
-      padding: 20px;
-    }
-  }
-}
+<style  lang='scss'>
 </style>

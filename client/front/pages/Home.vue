@@ -2,13 +2,13 @@
   <div class="container">
       <div class="list">
           <article v-for="article in articles" :key="article.id">
-                <h1> <router-link :to="'/article/'+article.id"  class="title">{{article.title}}</router-link></h1>
-                <div class="article-content">{{article.content}}
+                <h2> <router-link :to="'/article/'+article.id"  class="title">{{article.title}}</router-link></h2>
+                <div class="article-content">{{article.abstract}}
                 </div>
                 <router-link :to="'/article/'+article.id"  class="more">点击阅读更多</router-link>
                 <div class="article-data">
                     <ul class="article-tags">
-                        <li  v-for="tag in article.tags" :key="tag.id"><a href="">{{tag.name}}</a></li>
+                        <li  v-for="tag in article.tags" :key="tag.id"><a >{{tag.name}}</a></li>
                     </ul>
                     <div class="article-other">
                         <!-- <div class="article-other-count"><span>0</span>阅读</div> -->
@@ -17,7 +17,7 @@
                 </div> 
           </article>     
       </div>
-        <my-paging></my-paging>             
+        <my-paging :curPage="curPage" :allNum="allNum" :allPage="allPage" @changePage='changePage'></my-paging>             
 
   </div>
 </template>
@@ -34,23 +34,24 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["articles", "tags", "curPage", "allNum"])
+    ...mapGetters(["articles", "tags", "curPage", "allNum", "allPage"])
   },
   beforeMount() {
-    if (this.articles && this.articles.length!==0) {
+    if (this.articles && this.articles.length !== 0) {
       return;
     }
     this.getAllArticles();
-    this.getAllTags();
   },
   asyncData({ store, route }) {
-    store.dispatch("getAllTags");
     return store
       .dispatch("getAllArticles", { page: route.params.page })
       .then(() => {});
   },
   methods: {
-    ...mapActions(["getAllArticles", "getAllTags"])
+    ...mapActions(["getAllArticles", "getAllTags"]),
+    changePage(page) {
+      this.getAllArticles( { page:page }).then(()=>{})
+    }
   }
 };
 </script>
@@ -84,7 +85,7 @@ export default {
             border-radius: 2rem;
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 700;
+            font-weight: 600;
 
             &:hover {
               background-color: #fc4d50;

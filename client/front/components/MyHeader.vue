@@ -48,6 +48,7 @@ header {
         flex: 1;
         height: 5rem;
         line-height: 5rem;
+        list-style-type: none;
         li {
           margin-right: 20px;
           a{

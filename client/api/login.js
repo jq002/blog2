@@ -24,11 +24,11 @@ export default {
   getAllArticles(page = 1, limit = 1,tags = '' ) {
     return Axios.get(`/api/articles?tags=${tags}&page=${page}&limit=${limit}`)
   },
-  getAllPublishArticles(page = 1, limit = 1,tags ='') {
-    return Axios.get(`/api/publishArticles?tags=${tags}&page=${page}&limit=${limit}`)
+  getAllPublishArticles(page = 1, limit = 0,tags ='',searchTitle='') {
+    return Axios.get(`/api/publishArticles?tags=${tags}&page=${page}&limit=${limit}&searchTitle=${searchTitle}`)
   },
-  createArticle(title, content, publish, tags) {
-    return Axios.post('/api/articles', { title, content, publish, tags })
+  createArticle(title, abstract,content, publish, tags) {
+    return Axios.post('/api/articles', { title,abstract, content, publish, tags })
   },
   saveArticle(id, article) {
     return Axios.patch('/api/articles/' + id, article)

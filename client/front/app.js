@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './assets/global.css'
+import './assets/mkdown.css'
 import {createRouter} from './router/index'
 import {createStore} from './store/index'
 import { sync}from 'vuex-router-sync'

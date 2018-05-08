@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <my-header></my-header>
-    <div class="content">
+    <div class="app-content">
       <router-view/> 
     </div>
     <my-footer></my-footer>
@@ -24,14 +24,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.app-content {
   max-width: 850px;
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 2rem;
 }
 @media screen and (max-width: 500px) {
-  .content {
+  .app-content {
     padding: 0 1rem;
   }
 }

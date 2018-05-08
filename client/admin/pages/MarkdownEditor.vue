@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container container-add">
       <h3 class="title is-3">发布一篇新的文章</h3>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top">
         <!-- <el-form-item label="文章分类" prop="tags">
@@ -15,19 +15,24 @@
         <el-form-item label="文章标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入文章标题"></el-input>
         </el-form-item>
+        <el-form-item label="文章摘要" prop="abstract">
+          <el-input type="textarea" v-model="form.abstract" class="abstract"></el-input>
+        </el-form-item>
+
         <div class="el-form-item is-required" :class="{'is-error':validate.error}">
           <label class="el-form-item__label">文章内容</label>
           <div class="el-form-item__content">
               <div id="editor">
-                <textarea :value="content" @input="update"></textarea>
-                <div v-html="compiledMarkdown"  v-highlight></div>
+                <textarea :value="content" @input="update" v-bind:class="[{ active: !isLookArticle }]"></textarea>
+                <div v-html="compiledMarkdown"  v-highlight  v-bind:class="[{ active: isLookArticle }, 'editor-show','markdown-body']"></div>
               </div>
             <div v-if="validate.error" class="el-form-item__error">正文则能没有内容呢？</div>
           </div>
         </div>
-          <el-form-item>
+        <el-form-item>
             <el-button type="primary" @click="submit" @keyup.enter="submit">保存文章</el-button>
-            <!-- <el-button type="primary" @click="publish" @keyup.enter="publish">发布文章</el-button> -->
+            <el-button @click="lookArticle" v-if="isLookArticle">继续编辑</el-button>
+            <el-button @click="lookArticle" v-else>预览文章</el-button>
           </el-form-item>
       </el-form>
     </div>
@@ -42,18 +47,28 @@ export default {
   name: "MarkdownEditor",
   data() {
     return {
+      isLookArticle: false,
       content: "",
       tags: [],
       form: {
         tags: [],
-        title: ""
+        title: "",
+        abstract: ""
       },
       rules: {
         title: [
           { required: true, message: "必须填写标题哦！", trigger: "blur" }
         ],
+        abstract: [
+          { required: true, message: "必须填写摘要", trigger: "blur" }
+        ],
         tags: [
-           { type: 'array', required: true, message: '必须填写分类哦！', trigger: 'change' }
+          {
+            type: "array",
+            required: true,
+            message: "必须填写分类哦！",
+            trigger: "change"
+          }
         ]
       },
       validate: {
@@ -94,26 +109,35 @@ export default {
         return true;
       }
     },
+    lookArticle() {
+      this.isLookArticle = !this.isLookArticle;
+    },
     submit() {
       this.$refs.form.validate(valid => {
         let me = this.validateContent();
         if (valid && me) {
-          let tags=this.tags.filter(x=>{
-            return this.form.tags.some(y=>{
-              return x.name===y
-            })
-          })
+          let tags = this.tags.filter(x => {
+            return this.form.tags.some(y => {
+              return x.name === y;
+            });
+          });
           api
-            .createArticle(this.form.title, this.content, false, tags)
+            .createArticle(
+              this.form.title,
+              this.form.abstract,
+              this.content,
+              false,
+              tags
+            )
             .then(res => {
               if (res.data.success) {
                 this.$message.success("文章创建成功");
                 this.$router.replace({
-                  name:'Detail',
-                  params:{
-                    id:res.data.article.id
+                  name: "Detail",
+                  params: {
+                    id: res.data.article.id
                   }
-                })
+                });
               } else {
                 this.$message.success("文章创建失败");
               }
@@ -124,26 +148,40 @@ export default {
         }
       });
     },
-    publish(){
-
-    }
+    publish() {}
   }
 };
 </script>
 
-<style scoped lang='scss'>
-.container {
+<style  lang='scss'>
+//去掉scope,因为el-textarea__inner样式无法增加
+.container-add {
   // height: 100%;
+  .abstract{
+    .el-textarea__inner{
+      height: 100px;
+    }
+  }
   #editor {
     // height: 50%;
-    & > div {
+    position: relative;
+        
+    .editor-show {
       border: 1px solid #ccc;
+      overflow: scroll;
+      height: 500px;
+      position: absolute;
+      top: 0;
+      visibility: hidden;
+      &.active{
+        visibility: visible;
+      }
     }
     textarea,
-    & > div {
+    .editor-show {
       display: inline-block;
-      width: 49%;
-      height: 400px;
+      width: 100%;
+      min-height: 500px;
       vertical-align: top;
       box-sizing: border-box;
       padding: 0 20px;
@@ -156,6 +194,10 @@ export default {
       font-size: 14px;
       font-family: "Monaco", courier, monospace;
       padding: 20px;
+            visibility: hidden;
+      &.active{
+        visibility: visible;
+      }
     }
   }
 }

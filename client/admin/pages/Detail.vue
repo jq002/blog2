@@ -1,11 +1,18 @@
 <template>
   <div class="container" v-if="article">
+    <article class="markdown-body">
       <h1>{{article.title}}</h1>
       <div class="time"><span>创建时间：{{article.createTime}}</span><span>最后修改时间：{{article.lastEditTime}}</span></div>
+
       <div>      
           <el-tag  v-for="tag in article.tags" :key="tag.id" disable-transitions>{{tag.name}}</el-tag>
       </div>   
+      <div class="abstract-content">
+        {{article.abstract}}
+      </div>
       <div v-html="compiledMarkdown" v-highlight></div>
+    </article>
+
 
   </div>
 </template>
@@ -44,13 +51,17 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  & > div {
+  article {
     margin: 20px 0;
     .el-tag {
       margin-right: 10px;
     }
   }
+  .abstract-content{
+    margin: 10px 0 20px;
+  }
   .time {
+    margin-bottom: 10px;
     span {
       color: #aaa;
       font-size: 14px;

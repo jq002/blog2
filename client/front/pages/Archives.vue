@@ -1,16 +1,25 @@
 <template>
   <div class="container">
      <div class="search">
-         <input type="text" placeholder="搜索">
+         <input type="text" placeholder="搜索" v-model="searchTitle2" @keyup.enter='search'>
      </div>
      <ul class="tags" >
-         <li v-for="tag in tags" :key="tag.id"> <a href=""> {{tag.name}}<sup>13</sup></a></li>
+        <li  @click='showAll()'> 
+          <span  v-bind:class="{active:isShowAll}"> show all
+             <sup>{{allNum}}</sup>
+          </span>
+        </li>
+         <li v-for="tag in tags" :key="tag.id" @click='addTag(tag.id)'> 
+          <span  v-bind:class="{active:tag.active}"> {{tag.name}}
+             <!-- <sup>13</sup> -->
+          </span>
+        </li>
      </ul>
      <div class="list">
          <section>
              <h2>2018</h2>
              <ul>
-                 <li v-for="article in articles" :key="article.id">
+                 <li v-for="article in allArticles" :key="article.id">
                    <span class="date">{{article.lastEditTime}}</span>
                    <router-link :to="'/article/'+article.id"  class="title">{{article.title}}</router-link>
                 </li>
@@ -22,31 +31,92 @@
 </template>
 
 <script>
-import {mapGetters,mapActions} from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Archives",
   data() {
-    return {};
+    return {
+      searchTitle2: "",
+      selectTags2: "",
+      isShowAll: true
+    };
   },
   computed: {
-    ...mapGetters(["articles", "tags", "curPage", "allNum"])
+    ...mapGetters([
+      "allArticles",
+      "tags",
+      "searchTitle",
+      "selectTags",
+      "allNum"
+    ])
   },
-    beforeMount() {
-    if (this.articles &&  this.articles.length!==0) {
+  beforeMount() {
+    if (this.allArticles && this.allArticles.length !== 0) {
+      if (this.searchTitle) {
+        this.isShowAll=false;
+        this.searchTitle2 = this.searchTitle;
+      }
+      if (this.selectTags) {
+        this.isShowAll=false;
+        this.selectTags2 = this.selectTags;
+      }
       return;
     }
-    this.getAllArticles();
-    this.getAllTags();
+    this.getAllArticles({ limit: 0 });
+    this.getAllTags().then(res => {
+      res.data.tagArr.forEach(element => {
+        element.active = false;
+      });
+    });
   },
   asyncData({ store, route }) {
     store.dispatch("getAllTags");
-    return store
-      .dispatch("getAllArticles", { page: route.params.page })
-      .then(() => {});
+    return store.dispatch("getAllArticles", { limit: 0 }).then(() => {});
   },
   methods: {
-    ...mapActions(["getAllArticles", "getAllTags"])
+    ...mapActions(["getAllArticles", "getAllTags"]),
+    addTag(id) {
+      this.isShowAll = false;
+      this.tags.some(element => {
+        if (element.id === id) {
+          element.active = !element.active;
+        }
+        return element.id === id;
+      });
+      let arr = [];
+      this.tags.forEach(element => {
+        if (element.active) {
+          arr.push(element.id);
+        }
+      });
+      this.selectTags2 = arr.join(",");
+      this.getAllArticles({
+        limit: 0,
+        searchTitle: this.searchTitle2,
+        tags: this.selectTags2
+      });
+    },
+    search() {
+      this.isShowAll = false;
+      this.getAllArticles({
+        limit: 0,
+        searchTitle: this.searchTitle2,
+        tags: this.selectTags2
+      });
+    },
+    showAll() {
+      if (this.isShowAll) {
+        return;
+      }
+      this.tags.forEach(element => {
+        element.active = false;
+      });
+      this.isShowAll = true;
+      this.searchTitle2="";
+      this.selectTags2="";
+      this.getAllArticles({ limit: 0 });
+    }
   }
 };
 </script>
@@ -69,11 +139,12 @@ export default {
   }
   .tags {
     margin: 1rem 0;
+    list-style-type: none;
     li {
       display: inline-block;
       margin-right: 0.25rem;
       margin-bottom: 0.5rem;
-      a {
+      span {
         background-color: rgba(252, 77, 80, 0.4);
         color: #fff;
         padding: 2px 10px;
@@ -89,6 +160,10 @@ export default {
           background-color: #fca24d;
           color: #fff;
         }
+        &.active {
+          background-color: #fca24d;
+          color: #fff;
+        }
       }
     }
   }
@@ -96,6 +171,7 @@ export default {
     section {
       ul {
         margin: 0.5rem 0;
+        list-style-type: none;
         li {
           margin: 0.4rem 0;
           .date {
