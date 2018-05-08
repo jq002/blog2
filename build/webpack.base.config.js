@@ -98,12 +98,14 @@ if (process.env.NODE_ENV === 'production') {
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
+      // 定义 NODE_ENV 环境变量为 production，以去除源码中只有开发时才需要的部分
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
+    // 压缩输出的 JavaScript 代码
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
+      sourceMap: false,
       compress: {
         warnings: false
       }

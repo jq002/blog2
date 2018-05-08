@@ -11,7 +11,7 @@ module.exports = merge(baseConfig, {
   // admin:["webpack-hot-middleware/client?noInfo=true&reload=true","./client/admin/main.js"]
 },//相对于启动webpack的当前目录
   output:{
-      filename:'static-[name]-client.js',
+      filename:'[name].js',// 给输出的文件名称加上 Hash 值
   },
   plugins: [
     // 重要信息：这将 webpack 运行时分离到一个引导 chunk 中，

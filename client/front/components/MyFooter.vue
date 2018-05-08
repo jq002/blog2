@@ -1,6 +1,6 @@
 <template>
   <footer>
-      <p>jqpipa002@163.com</p>
+      <p>qinpipa002@gmail.com</p>
   </footer>
 </template>
 

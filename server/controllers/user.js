@@ -14,10 +14,11 @@ class UserController{
                 username:config.admin.username,
                 password:md5(config.admin.password).toUpperCase()
             })
+            await user.save().catch(err=>{
+                console.log(err)
+            })     
         }
-        await user.save().catch(err=>{
-            console.log(err)
-        })      
+ 
     }
     static async postLogin(ctx){
         const username=ctx.request.body.username;

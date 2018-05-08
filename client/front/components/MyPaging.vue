@@ -63,7 +63,7 @@ nav {
       border-radius: 50%;
       line-height: 2rem;
       text-align: center;
-      font-weight: 700;
+      font-weight: 600;
       background-color: #f2f2f2;
       color: #333;
       font-size: 0.9rem;
