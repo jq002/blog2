@@ -44,9 +44,6 @@ export function createStore () {
     },
     actions: {
       getAllArticles({commit,state},{tags='',page=1,limit=3,searchTitle=''}={}){
-        console.log('tags')
-
-        console.log(tags)
         return api.getAllPublishArticles(page,limit,tags,searchTitle).then((res)=>{
           let obj;
           if(!limit){
@@ -72,7 +69,6 @@ export function createStore () {
         let article=state.articles.find(article=>article.id==id)
         if(article&&article.content){
           commit(GET_ARTICLE,article)
-          console.log(article)
           return new Promise((resolve,reject)=>{
             resolve(article);
           })

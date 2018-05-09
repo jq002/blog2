@@ -45,7 +45,7 @@ Axios.interceptors.response.use(function(res){
 },function(err){
   if(err.response.data.indexOf('token')){
     store.commit("DELETE_TOKEN")
-    console.log("登陆失效，请重新登陆")
+    // console.log("登陆失效，请重新登陆")
     // app.$message.error("登陆失效，请重新登陆");
   }
   return Promise.reject(err);

@@ -66,16 +66,6 @@ if (isProd) {
     renderer = createRenderer(bundle, template)
   })
 }
-
-// // 提示webpack还在工作
-// routerInfo.get('*', async(ctx, next) => {
-//   if (!renderer) {
-//     return ctx.body = 'waiting for compilation... refresh in a moment.';
-//   }
-//   return next();
-// })
-
-// app.use(routerInfo.routes())
 // 流式渲染
 router.get('*', async(ctx, next) => {
   let res = ctx.res;
