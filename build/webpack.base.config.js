@@ -1,16 +1,24 @@
 var path = require('path')
 var webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   //   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, '../dist'),//打包后存放的本地目录，必须是string类型的绝对路径
-    publicPath: '/',//配置发布到线上的资源的路径前缀
+    path: path.resolve(__dirname, '../dist'), //打包后存放的本地目录，必须是string类型的绝对路径
+    publicPath: '/', //配置发布到线上的资源的路径前缀
     filename: '[name].js'
   },
   module: {
     rules: [{
         test: /\.css$/,
+        // use: ExtractTextPlugin.extract({
+        //   use: [
+        //     'vue-style-loader',
+        //     'css-loader'
+        //   ],
+        //   fallback: 'vue-style-loader'
+        // })
         use: [
           'vue-style-loader',
           'css-loader'
@@ -18,6 +26,14 @@ module.exports = {
       },
       {
         test: /\.scss$/,
+        // use: ExtractTextPlugin.extract({
+        //   use: [
+        //     'vue-style-loader',
+        //     'css-loader',
+        //     'sass-loader'
+        //   ],
+        //   fallback: 'vue-style-loader'
+        // })
         use: [
           'vue-style-loader',
           'css-loader',
@@ -26,6 +42,14 @@ module.exports = {
       },
       {
         test: /\.sass$/,
+        // use: ExtractTextPlugin.extract({
+        //   use: [
+        //     'vue-style-loader',
+        //     'css-loader',
+        //     'sass-loader?indentedSyntax'
+        //   ],
+        //   fallback: 'vue-style-loader'
+        // })
         use: [
           'vue-style-loader',
           'css-loader',
@@ -107,7 +131,10 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
       compress: {
-        warnings: false
+        // 在UglifyJs删除没有用到的代码时不输出警告
+        warnings: false,
+        // 删除所有的 `console` 语句，可以兼容ie浏览器
+        drop_console: true,
       }
     }),
     new webpack.LoaderOptionsPlugin({

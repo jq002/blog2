@@ -9,7 +9,7 @@
     "dev": "nodemon ./server/server.js",
     "build-test": "cross-env NODE_ENV=production nodemon ./server/server.js",
     "build": "npm run build:client && npm run build:server",
-    "build:client": " cross-env NODE_ENV=production webpack --config ./build/webpack.client.prod.config.js --colors --profile --display-modules --progress",
+    "build:client": " cross-env NODE_ENV=production webpack --config ./build/webpack.client.prod.config.js --colors --profile --display-modules --progress ",
     "build:server": "cross-env NODE_ENV=production webpack --config ./build/webpack.server.config.js --colors --profile --display-modules --progress"
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
     "koa2-history-api-fallback": "^0.0.5",
-    "lodash": "^4.17.10",
+    "lodash.debounce": "^4.0.8",
     "lru-cache": "^4.1.2",
     "marked": "^0.3.19",
     "mavon-editor": "^2.5.9",
@@ -61,6 +61,7 @@
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.5.3",
     "nodemon": "^1.17.3",
+    "optimize-css-assets-webpack-plugin": "^4.0.1",
     "sass-loader": "^6.0.6",
     "url-loader": "^1.0.1",
     "vue-loader": "^13.0.5",

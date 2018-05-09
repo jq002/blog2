@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import debounce from "lodash.debounce";
 import marked from "marked";
 import api from "./../../api/login";
 export default {
@@ -97,7 +97,7 @@ export default {
     }
   },
   methods: {
-    update: _.debounce(function(e) {
+    update: debounce(function(e) {
       this.form.content = e.target.value;
     }, 300),
     getAllTags() {
