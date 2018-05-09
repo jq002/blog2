@@ -59,7 +59,7 @@ if (isProd) {
   const bundle = require('../dist/vue-ssr-server-bundle.json')
   const template = fs.readFileSync(resolve('../dist/front.html'), 'utf-8')
   renderer = createRenderer(bundle, template)
-  // app.use(serve('./client/dist'));
+  app.use(static(staticPath))
 } else {
   // 开发环境下使用hot/dev middleware拿到bundle与template
   require('../build/setup-dev-server')(app, (bundle, template) => {

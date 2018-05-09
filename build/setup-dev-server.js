@@ -8,7 +8,7 @@ module.exports = function setupDevServer (app, cb) {
   let bundle
   let template
 
-  const clientCompiler = webpack(clientConfig)
+  const clientCompiler = webpack(clientConfig)//创建的编译器实例，一遍注册调用插件
   const devMiddleware = require('./koa2devMiddleware.js')(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     stats: {
@@ -19,7 +19,7 @@ module.exports = function setupDevServer (app, cb) {
   app.use(devMiddleware)
 
   
-  clientCompiler.plugin('done', () => {
+  clientCompiler.plugin('done', () => {//编译完成
     const fs = devMiddleware.fileSystem
     const filePath = path.join(clientConfig.output.path, 'front.html')
     console.log("clientPath",clientConfig.output.path)
