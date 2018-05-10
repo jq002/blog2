@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "nodemon ./server/server.js",
     "build-test": "cross-env NODE_ENV=production nodemon ./server/server.js",
+    "pm2": " pm2 start pm2.json --env production",
     "build": "npm run build:client && npm run build:server",
     "build:client": " cross-env NODE_ENV=production webpack --config ./build/webpack.client.prod.config.js --colors --profile --display-modules --progress ",
     "build:server": "cross-env NODE_ENV=production webpack --config ./build/webpack.server.config.js --colors --profile --display-modules --progress"

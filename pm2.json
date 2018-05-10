@@ -1,0 +1,14 @@
+[{
+    "name": "blog",
+    "script": "server/server.js",
+    "error_file": "server/logs/app-err.log",
+    "out_file": "server/logs/app-out.log",
+    "env_dev": {
+      "NODE_ENV": "development"
+    },
+    "env": {
+        "NODE_ENV": "production"
+      }
+  }]
+
+  
