@@ -43,7 +43,7 @@ export function createStore () {
       currentArticleCompile: state => state.currentArticleCompile
     },
     actions: {
-      getAllArticles({commit,state},{tags='',page=1,limit=3,searchTitle=''}={}){
+      getAllArticles({commit,state},{tags='',page=1,limit=5,searchTitle=''}={}){
         return api.getAllPublishArticles(page,limit,tags,searchTitle).then((res)=>{
           let obj;
           if(!limit){

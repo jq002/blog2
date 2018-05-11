@@ -24,7 +24,7 @@ export default {
   getAllArticles(page = 1, limit = 1,tags = '' ) {
     return Axios.get(`/api/articles?tags=${tags}&page=${page}&limit=${limit}`)
   },
-  getAllPublishArticles(page = 1, limit = 0,tags ='',searchTitle='') {
+  getAllPublishArticles(page = 1, limit = 1,tags ='',searchTitle='') {
     return Axios.get(`/api/publishArticles?tags=${tags}&page=${page}&limit=${limit}&searchTitle=${searchTitle}`)
   },
   createArticle(title, abstract,content, publish, tags) {
