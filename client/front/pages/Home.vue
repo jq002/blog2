@@ -87,10 +87,10 @@ export default {
             font-size: 0.9rem;
             font-weight: 600;
 
-            &:hover {
-              background-color: #fc4d50;
-              color: #fff;
-            }
+            // &:hover {
+            //   background-color: #fc4d50;
+            //   color: #fff;
+            // }
           }
         }
       }
