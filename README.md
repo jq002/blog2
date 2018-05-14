@@ -38,3 +38,4 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 - docker和ngnix
 - 域名
 - 设计一个自己的logo(favicon.ico)
+- front的head修改

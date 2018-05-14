@@ -7,7 +7,6 @@ async function verify(ctx,next) {
     if(authorization===''){
         ctx.throw(401, 'no token detected in http header \'Authorization\'');
     }
-    // const token=authorization.split()
     try{
         await jwt.verify(authorization,config.jwt.secret);
     }catch(err){
