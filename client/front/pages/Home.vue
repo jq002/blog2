@@ -78,6 +78,7 @@ export default {
         li {
           display: inline-block;
           margin-right: 0.25rem;
+          margin-bottom: .5rem;
           a {
             background-color: #f2f2f2;
             color: #333;
