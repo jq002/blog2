@@ -23,7 +23,6 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 router.beforeEach((to,from,next)=>{
-  // console.log(store.state);
   if(to.meta.authPage){
     if(store.state.token){
       next('/admin')
@@ -34,7 +33,6 @@ router.beforeEach((to,from,next)=>{
       Axios.defaults.headers.common['Authorization']=store.state.token;
       next()
     }else{
-      // app.$message.error("请先登录");
       next('/admin/login')
     }
   }
@@ -45,7 +43,6 @@ Axios.interceptors.response.use(function(res){
 },function(err){
   if(err.response.data.indexOf('token')){
     store.commit("DELETE_TOKEN")
-    // console.log("登陆失效，请重新登陆")
     // app.$message.error("登陆失效，请重新登陆");
   }
   return Promise.reject(err);
