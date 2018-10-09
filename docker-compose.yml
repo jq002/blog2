@@ -5,18 +5,16 @@ services:
       context: .
       dockerfile: node.dockerfile
     ports:
-      - "8889:8889"
+      - "8886:8886"
     environment:
-      NODE_ENV: development
-      MONGO_URL: mongodb://mongodb/vue-blog
-    volumes:
-      - .:/home/app/vue-blog
-      - /home/app/vue-blog/node_modules
-    command: ["npm", "run", "dev"]
+      NODE_ENV: production
+      MONGO_URL: mongodb://mongodb/blog
+    command: ["npm", "run", "prod"]
     links:
       - mongodb
     depends_on:
       - mongodb
+    restart: on-failure
   mongodb:
     image: mongo
     ports:
