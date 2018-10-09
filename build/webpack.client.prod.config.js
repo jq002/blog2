@@ -7,6 +7,7 @@ const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = merge(baseConfig, {
   entry: {
@@ -79,6 +80,7 @@ module.exports = merge(baseConfig, {
       template: './client/admin/index.html',
       chunks: ['manifest', 'vendor_admin', 'admin'],
       inject: true
-    })
+    }),
+    // new BundleAnalyzerPlugin()
   ]
 })

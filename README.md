@@ -46,6 +46,7 @@ npm run pm2
 - 域名
 - 设计一个自己的logo(favicon.ico)
 - front端的head修改
+- 增加修改密码
 
 ## 参考文献
 - [基于vue2、koa2、mongodb的个人博客](https://imhjm.com/article/58f76ed0c9eb43547d08ec6c#h3-13)
